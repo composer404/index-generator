@@ -4,8 +4,7 @@ The extension generates an index file which exports all typescript files in a di
 
 ## Usage
 
-In a directory when you want to generate an index, open a typescript file. Use a 'Generate index with exports' command or use shortcut 'Ctrl + Alt + G'. The index file will be create in a following form:
-
+In a directory, where you want to generate an index, open a typescript file. Use a 'Generate index with exports' command or use 'Ctrl + Alt + G' shortcut. The index file will be created.
 
 ![animation](https://github.com/BoomSoftware/index-generator/blob/master/img/index-generator.gif)
 
