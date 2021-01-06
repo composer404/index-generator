@@ -7,6 +7,8 @@ The extension generates an index file which exports all typescript files in a di
 In a directory when you want to generate an index, open a typescript file. Use a 'Generate index with exports' command or use shortcut 'Ctrl + Alt + G'. The index file will be create in a following form:
 
 
+![animation](https://github.com/BoomSoftware/index-generator.git)
+
 ## Extension Settings
 
 Using the .prettierrc file in a directory it is possible to set a quotes type in generated index. 
