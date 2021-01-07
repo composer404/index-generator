@@ -1,12 +1,10 @@
 ## Features
-<hr>
 
 The extension generates an index file with exports. The elements and text format that will appear in the index depend on the selected command and selected configuration in <strong>.prettierrc</strong> file.
 
 ![animation](https://github.com/BoomSoftware/index-generator/blob/master/img/index-generator.gif?raw=true)
 
 ## Usage
-<hr>
 
 <h3><strong>Export only typescript files</strong></h3>
 <p>In a directory, where you want to generate an index, open a typescript file. Use a 'Generate/Update index with typescript files' command or use <span style="background-color:grey; padding: 1px 5px; border-radius:5px">Ctrl + Alt + G</span> shortcut. The index file will be created.
@@ -17,7 +15,6 @@ The extension generates an index file with exports. The elements and text format
 </p>
 
 ## Extension Settings
-<hr>
 
 Using the <strong>.prettierrc</strong> file in a selected directory, it is possible to set extension's configuration:
 
