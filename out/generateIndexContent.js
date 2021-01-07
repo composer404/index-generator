@@ -11,17 +11,21 @@ function generateIndexContent(files, excludePatterns = []) {
         var _a;
         const fileWithoutExtension = file.replace(/\.[^\.]+$/, '');
         try {
-            let obj = { singleQuote: true };
+            let obj = {
+                singleQuote: true,
+                semi: true,
+            };
             (_a = vscode.workspace.workspaceFolders) === null || _a === void 0 ? void 0 : _a.map(folder => {
                 obj = JSON.parse(fs.readFileSync(folder.uri.path + '/.prettierrc', 'utf8'));
             });
+            const semi = obj.semi ? `;` : ``;
             if (obj.singleQuote) {
-                return `export * from './${fileWithoutExtension}' \n`;
+                return `export * from './${fileWithoutExtension}'${semi} \n`;
             }
-            return `export * from "./${fileWithoutExtension}" \n`;
+            return `export * from "./${fileWithoutExtension}"${semi} \n`;
         }
         catch (_b) {
-            return `export * from './${fileWithoutExtension}' \n`;
+            return `export * from './${fileWithoutExtension}'; \n`;
         }
     });
     return exportLines.join('');

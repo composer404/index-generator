@@ -2,7 +2,7 @@
 	"name": "index-generator",
 	"displayName": "index-generator",
 	"description": "The extension generates an index file which exports all typescript files in a directory.",
-	"version": "0.0.1",
+	"version": "0.0.3",
 	"license": "MIT",
 	"repository": "https://github.com/BoomSoftware/index-generator.git",
 	"publisher": "przemo1115",

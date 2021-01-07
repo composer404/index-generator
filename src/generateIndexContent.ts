@@ -12,18 +12,24 @@ export function generateIndexContent(files: string[], excludePatterns: string[] 
     const exportLines = exportedFiles.map((file) => {
         const fileWithoutExtension = file.replace(/\.[^\.]+$/, '');
         try{
-                let obj: Config = {singleQuote: true};
+                let obj: Config = {
+                    singleQuote: true, 
+                    semi: true,
+                };
+                
                 vscode.workspace.workspaceFolders?.map(folder => {
                 obj = JSON.parse(fs.readFileSync(folder.uri.path + '/.prettierrc', 'utf8'));
                 });
 
+                const semi = obj.semi ? `;` : ``;
+
                 if(obj.singleQuote) {
-                    return `export * from './${fileWithoutExtension}' \n`;
+                    return `export * from './${fileWithoutExtension}'${semi} \n`;
                 }
-                return `export * from "./${fileWithoutExtension}" \n`;   
+                return `export * from "./${fileWithoutExtension}"${semi} \n`;   
         }
         catch{
-            return `export * from './${fileWithoutExtension}' \n`;
+            return `export * from './${fileWithoutExtension}'; \n`;
         }
         
     });
@@ -33,4 +39,5 @@ export function generateIndexContent(files: string[], excludePatterns: string[] 
 
 export interface Config{
     singleQuote: boolean;
+    semi: boolean;
 }
