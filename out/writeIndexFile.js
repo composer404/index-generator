@@ -13,12 +13,18 @@ exports.writeIndexFile = void 0;
 const fsExtra = require("fs-extra");
 const path_1 = require("path");
 const generateIndexContent_1 = require("./generateIndexContent");
-function writeIndexFile(targetFolder, fs = fsExtra) {
+function writeIndexFile(targetFolder, withFolders) {
     return __awaiter(this, void 0, void 0, function* () {
-        const files = yield fs.readdir(targetFolder);
-        const indexFilePath = path_1.resolve(targetFolder, "index.ts");
-        const indexContent = generateIndexContent_1.generateIndexContent(files, [".test.", "__snapshots__"]);
-        yield fs.writeFile(indexFilePath, indexContent);
+        const files = yield fsExtra.readdir(targetFolder);
+        const indexFilePath = path_1.resolve(targetFolder, 'index.ts');
+        let indexContent;
+        if (withFolders) {
+            indexContent = generateIndexContent_1.generateIndexContent(files, true, ['.test.', '__snapshots__']);
+        }
+        else {
+            indexContent = generateIndexContent_1.generateIndexContent(files, false, ['.test.', '__snapshots__']);
+        }
+        yield fsExtra.writeFile(indexFilePath, indexContent);
     });
 }
 exports.writeIndexFile = writeIndexFile;

@@ -9,11 +9,21 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deactivate = exports.activate = void 0;
+exports.activate = void 0;
 const path_1 = require("path");
 const vscode = require("vscode");
 const writeIndexFile_1 = require("./writeIndexFile");
 function generateIndexCommand() {
+    return __awaiter(this, void 0, void 0, function* () {
+        generate(false);
+    });
+}
+function generateIndexWithFoldersCommand() {
+    return __awaiter(this, void 0, void 0, function* () {
+        generate(true);
+    });
+}
+function generate(withFolders) {
     return __awaiter(this, void 0, void 0, function* () {
         const { activeTextEditor } = vscode.window;
         if (!activeTextEditor) {
@@ -26,10 +36,7 @@ function generateIndexCommand() {
             return;
         }
         try {
-            yield writeIndexFile_1.writeIndexFile(path_1.dirname(fileName));
-            // FIXME: figure out how to do this properly
-            // await vscode.workspace.openTextDocument(indexFilePath)
-            // await vscode.window.showTextDocument(vscode.Uri.parse(indexFilePath))
+            yield writeIndexFile_1.writeIndexFile(path_1.dirname(fileName), withFolders);
         }
         catch (error) {
             const errorMessage = `[Generate TS File] Something went wrong: ${error}`;
@@ -38,10 +45,9 @@ function generateIndexCommand() {
     });
 }
 function activate(context) {
-    let disposable = vscode.commands.registerCommand("extension.generateIndex", generateIndexCommand);
-    context.subscriptions.push(disposable);
+    let onlyTs = vscode.commands.registerCommand("extension.generateIndex", generateIndexCommand);
+    let tsAndFolders = vscode.commands.registerCommand("extension.generateIndexWithFolders", generateIndexWithFoldersCommand);
+    context.subscriptions.push(onlyTs, tsAndFolders);
 }
 exports.activate = activate;
-function deactivate() { }
-exports.deactivate = deactivate;
 //# sourceMappingURL=extension.js.map

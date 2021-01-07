@@ -1,16 +1,25 @@
 ## Features
+<hr>
 
-The extension generates an index file which exports all typescript files in a directory. 
-
-## Usage
-
-In a directory, where you want to generate an index, open a typescript file. Use a 'Generate index with exports' command or use 'Ctrl + Alt + G' shortcut. The index file will be created.
+The extension generates an index file with exports. The elements and text format that will appear in the index depend on the selected command and selected configuration in <strong>.prettierrc</strong> file.
 
 ![animation](https://github.com/BoomSoftware/index-generator/blob/master/img/index-generator.gif?raw=true)
 
-## Extension Settings
+## Usage
+<hr>
 
-Using the .prettierrc file in a selected directory, it is possible to set extension's configuration:
+<h3><strong>Export only typescript files</strong></h3>
+<p>In a directory, where you want to generate an index, open a typescript file. Use a 'Generate/Update index with typescript files' command or use <span style="background-color:grey; padding: 1px 5px; border-radius:5px">Ctrl + Alt + G</span> shortcut. The index file will be created.
+</p>
+
+<h3><strong>Export folders and typescript files</strong></h3>
+<p>In a directory, where you want to generate an index, open a typescript file. Use a 'Generate/Update index with folders and typescript files' command or use <span style="background-color:grey; padding: 1px 5px; border-radius:5px">Ctrl + Alt + F</span> shortcut. The index file will be created.
+</p>
+
+## Extension Settings
+<hr>
+
+Using the <strong>.prettierrc</strong> file in a selected directory, it is possible to set extension's configuration:
 
 * `singleQuote`: true/false - provides a possibility to set type of quotes in the generated index file
 

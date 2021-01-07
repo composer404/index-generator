@@ -13,14 +13,19 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onCommand:extension.generateIndex"
+		"onCommand:extension.generateIndex",
+		"onCommand:extension.generateIndexWithFolders"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
 		"commands": [
 			{
 				"command": "extension.generateIndex",
-				"title": "Generate index with exports"
+				"title": "Generate/Update index with typescript files"
+			},
+			{
+				"command": "extension.generateIndexWithFolders",
+				"title": "Generate/Update index with folders and typescript files"
 			}
 		],
 		"keybindings": [
@@ -28,6 +33,11 @@
 				"command": "extension.generateIndex",
 				"key": "ctrl+alt+g",
 				"mac": "shift+cmd+g"
+			},
+			{
+				"command": "extension.generateIndexWithFolders",
+				"key": "ctrl+alt+f",
+				"mac": "shift+cmd+f"
 			}
 		]
 	},

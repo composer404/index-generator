@@ -3,6 +3,14 @@ import * as vscode from "vscode";
 import { writeIndexFile } from "./writeIndexFile";
 
 async function generateIndexCommand() {
+  generate(false);
+}
+
+async function generateIndexWithFoldersCommand() {
+  generate(true);
+}
+
+async function generate(withFolders: boolean) {
   const { activeTextEditor } = vscode.window;
   if (!activeTextEditor) {
     vscode.window.showErrorMessage(
@@ -20,11 +28,8 @@ async function generateIndexCommand() {
   }
 
   try {
-    await writeIndexFile(dirname(fileName));
+    await writeIndexFile(dirname(fileName), withFolders);
 
-    // FIXME: figure out how to do this properly
-    // await vscode.workspace.openTextDocument(indexFilePath)
-    // await vscode.window.showTextDocument(vscode.Uri.parse(indexFilePath))
   } catch (error) {
     const errorMessage = `[Generate TS File] Something went wrong: ${error}`;
     vscode.window.showErrorMessage(errorMessage);
@@ -32,12 +37,15 @@ async function generateIndexCommand() {
 }
 
 export function activate(context: vscode.ExtensionContext) {
-  let disposable = vscode.commands.registerCommand(
+  let onlyTs = vscode.commands.registerCommand(
     "extension.generateIndex",
     generateIndexCommand,
   );
 
-  context.subscriptions.push(disposable);
-}
+  let tsAndFolders = vscode.commands.registerCommand(
+    "extension.generateIndexWithFolders",
+    generateIndexWithFoldersCommand
+  );
 
-export function deactivate() {}
+  context.subscriptions.push(onlyTs, tsAndFolders);
+}
