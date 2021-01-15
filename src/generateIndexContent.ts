@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import * as vscode from 'vscode';
 
-export function generateIndexContent(files: string[], withFolders: boolean, excludePatterns: string[]) {
+export function generateIndexContent(files: string[], withFolders: boolean, excludePatterns: string[], targetFolder: string) {
     let exportLines = getTypeScriptFiles(files, excludePatterns).map((file) => {
         const fileWithoutExtension = file.replace(/\.[^\.]+$/, '');
         try {
@@ -26,7 +26,7 @@ export function generateIndexContent(files: string[], withFolders: boolean, excl
     });
 
     if (withFolders) {
-        const exportDirectories = getDirectories().map((directory) => {
+        const exportDirectories = getDirectories(targetFolder).map((directory) => {
             try {
                 let obj: Config = {
                     singleQuote: true,
@@ -54,14 +54,10 @@ export function generateIndexContent(files: string[], withFolders: boolean, excl
     return exportLines.sort().join('');
 }
 
-function getDirectories(): string[] {
-    if (vscode.workspace.workspaceFolders) {
-        const root = vscode.workspace.workspaceFolders[0];
-        return fs.readdirSync(root.uri.path).filter(function (file) {
-            return fs.statSync(root.uri.path + '/' + file).isDirectory();
+function getDirectories(folder: string): string[] {
+        return fs.readdirSync(folder).filter(function (file) {
+            return fs.statSync(folder + '/' + file).isDirectory();
         });
-    }
-    return [];
 }
 
 function getTypeScriptFiles(files: string[], excludePatterns: string[]): string[] {

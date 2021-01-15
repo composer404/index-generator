@@ -6,10 +6,11 @@ export async function writeIndexFile(targetFolder: string, withFolders: boolean)
     const files = await fsExtra.readdir(targetFolder);
     const indexFilePath = resolve(targetFolder, 'index.ts');
     let indexContent;
+    
     if (withFolders) {
-        indexContent = generateIndexContent(files, true, ['.test.', '__snapshots__']);
+        indexContent = generateIndexContent(files, true, ['.test.', '__snapshots__'], targetFolder);
     } else {
-        indexContent = generateIndexContent(files, false, ['.test.', '__snapshots__']);
+        indexContent = generateIndexContent(files, false, ['.test.', '__snapshots__'], targetFolder);
     }
     await fsExtra.writeFile(indexFilePath, indexContent);
 }

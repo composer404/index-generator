@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.generateIndexContent = void 0;
 const fs = require("fs");
 const vscode = require("vscode");
-function generateIndexContent(files, withFolders, excludePatterns) {
+function generateIndexContent(files, withFolders, excludePatterns, targetFolder) {
     let exportLines = getTypeScriptFiles(files, excludePatterns).map((file) => {
         var _a;
         const fileWithoutExtension = file.replace(/\.[^\.]+$/, '');
@@ -26,7 +26,7 @@ function generateIndexContent(files, withFolders, excludePatterns) {
         }
     });
     if (withFolders) {
-        const exportDirectories = getDirectories().map((directory) => {
+        const exportDirectories = getDirectories(targetFolder).map((directory) => {
             var _a;
             try {
                 let obj = {
@@ -51,14 +51,10 @@ function generateIndexContent(files, withFolders, excludePatterns) {
     return exportLines.sort().join('');
 }
 exports.generateIndexContent = generateIndexContent;
-function getDirectories() {
-    if (vscode.workspace.workspaceFolders) {
-        const root = vscode.workspace.workspaceFolders[0];
-        return fs.readdirSync(root.uri.path).filter(function (file) {
-            return fs.statSync(root.uri.path + '/' + file).isDirectory();
-        });
-    }
-    return [];
+function getDirectories(folder) {
+    return fs.readdirSync(folder).filter(function (file) {
+        return fs.statSync(folder + '/' + file).isDirectory();
+    });
 }
 function getTypeScriptFiles(files, excludePatterns) {
     excludePatterns = [];

@@ -19,10 +19,10 @@ function writeIndexFile(targetFolder, withFolders) {
         const indexFilePath = path_1.resolve(targetFolder, 'index.ts');
         let indexContent;
         if (withFolders) {
-            indexContent = generateIndexContent_1.generateIndexContent(files, true, ['.test.', '__snapshots__']);
+            indexContent = generateIndexContent_1.generateIndexContent(files, true, ['.test.', '__snapshots__'], targetFolder);
         }
         else {
-            indexContent = generateIndexContent_1.generateIndexContent(files, false, ['.test.', '__snapshots__']);
+            indexContent = generateIndexContent_1.generateIndexContent(files, false, ['.test.', '__snapshots__'], targetFolder);
         }
         yield fsExtra.writeFile(indexFilePath, indexContent);
     });
