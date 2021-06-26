@@ -11,18 +11,33 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.writeIndexFile = void 0;
 const fsExtra = require("fs-extra");
-const path_1 = require("path");
+const interfaces_1 = require("./interfaces.");
 const generateIndexContent_1 = require("./generateIndexContent");
-function writeIndexFile(targetFolder, withFolders) {
+const path_1 = require("path");
+function writeIndexFile(targetFolder, withFolders, fileType) {
     return __awaiter(this, void 0, void 0, function* () {
         const files = yield fsExtra.readdir(targetFolder);
-        const indexFilePath = path_1.resolve(targetFolder, 'index.ts');
-        let indexContent;
+        let indexContent = ``;
+        let indexFilePath = ``;
+        switch (fileType) {
+            case (interfaces_1.FileTypes.TYPESCRIPT): {
+                indexFilePath = path_1.resolve(targetFolder, `index.ts`);
+                break;
+            }
+            case (interfaces_1.FileTypes.SCSS): {
+                indexFilePath = path_1.resolve(targetFolder, `index.scss`);
+                break;
+            }
+            case (interfaces_1.FileTypes.CSS): {
+                indexFilePath = path_1.resolve(targetFolder, `index.css`);
+                break;
+            }
+        }
         if (withFolders) {
-            indexContent = generateIndexContent_1.generateIndexContent(files, true, ['.test.', '__snapshots__'], targetFolder);
+            indexContent = generateIndexContent_1.generateIndexContent(files, true, targetFolder, fileType);
         }
         else {
-            indexContent = generateIndexContent_1.generateIndexContent(files, false, ['.test.', '__snapshots__'], targetFolder);
+            indexContent = generateIndexContent_1.generateIndexContent(files, false, targetFolder, fileType);
         }
         yield fsExtra.writeFile(indexFilePath, indexContent);
     });

@@ -3,63 +3,97 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.generateIndexContent = void 0;
 const fs = require("fs");
 const vscode = require("vscode");
-function generateIndexContent(files, withFolders, excludePatterns, targetFolder) {
-    let exportLines = getTypeScriptFiles(files, excludePatterns).map((file) => {
-        var _a;
-        const fileWithoutExtension = file.replace(/\.[^\.]+$/, '');
-        try {
-            let obj = {
-                singleQuote: true,
-                semi: true,
-            };
-            (_a = vscode.workspace.workspaceFolders) === null || _a === void 0 ? void 0 : _a.map((folder) => {
-                obj = JSON.parse(fs.readFileSync(folder.uri.path + '/.prettierrc', 'utf8'));
+const interfaces_1 = require("./interfaces.");
+function generateIndexContent(files, withFolders, targetFolder, fileType) {
+    const config = loadPrettierrc();
+    let exportedFiles = [];
+    let exportedDirectories = [];
+    switch (fileType) {
+        case (interfaces_1.FileTypes.TYPESCRIPT): {
+            exportedFiles = getTypeScriptFiles(files).map((file) => {
+                const fileWithoutExtension = file.replace(/\.[^\.]+$/, ``);
+                return styleImportedLineWithExportKeyWord(fileWithoutExtension, config);
             });
-            const semi = obj.semi ? `;` : ``;
-            if (obj.singleQuote) {
-                return `export * from './${fileWithoutExtension}'${semi}\n`;
-            }
-            return `export * from "./${fileWithoutExtension}"${semi}\n`;
+            break;
         }
-        catch (_b) {
-            return `export * from './${fileWithoutExtension}';\n`;
+        case (interfaces_1.FileTypes.SCSS): {
+            exportedFiles = getSCSSFiles(files).map((file) => {
+                const fileWithoutExtension = file.replace(/\.[^\.]+$/, ``);
+                return styleImportedLineWithImportKeyWord(fileWithoutExtension, config);
+            });
+            break;
         }
-    });
-    if (withFolders) {
-        const exportDirectories = getDirectories(targetFolder).map((directory) => {
-            var _a;
-            try {
-                let obj = {
-                    singleQuote: true,
-                    semi: true,
-                };
-                (_a = vscode.workspace.workspaceFolders) === null || _a === void 0 ? void 0 : _a.map((folder) => {
-                    obj = JSON.parse(fs.readFileSync(folder.uri.path + '/.prettierrc', 'utf8'));
-                });
-                const semi = obj.semi ? `;` : ``;
-                if (obj.singleQuote) {
-                    return `export * from './${directory}'${semi}\n`;
-                }
-                return `export * from "./${directory}"${semi}\n`;
-            }
-            catch (_b) {
-                return `export * from './${directory}';\n`;
-            }
-        });
-        exportLines = exportLines.concat(exportDirectories);
+        case (interfaces_1.FileTypes.CSS): {
+            exportedFiles = getCSSFiles(files).map((file) => {
+                const fileWithoutExtension = file.replace(/\.[^\.]+$/, ``);
+                return styleImportedLineWithImportKeyWord(fileWithoutExtension, config);
+            });
+            break;
+        }
     }
-    return exportLines.sort().join('');
+    if (withFolders) {
+        exportedDirectories = getDirectories(targetFolder).map((directory) => {
+            if (fileType === interfaces_1.FileTypes.SCSS || fileType === interfaces_1.FileTypes.CSS) {
+                return styleImportedLineWithImportKeyWord(directory, config);
+            }
+            return styleImportedLineWithExportKeyWord(directory, config);
+        });
+    }
+    exportedFiles = exportedFiles.concat(exportedDirectories);
+    return exportedFiles.sort().join('');
 }
 exports.generateIndexContent = generateIndexContent;
+function styleImportedLineWithExportKeyWord(name, config) {
+    const semi = config.semi ? `;` : ``;
+    if (config.singleQuote) {
+        return `export * from './${name}'${semi}\n`;
+    }
+    return `export * from "./${name}"${semi}\n`;
+}
+function styleImportedLineWithImportKeyWord(name, config) {
+    const semi = config.semi ? `;` : ``;
+    if (config.singleQuote) {
+        return `@import './${name}'${semi}\n`;
+    }
+    return `@import "./${name}"${semi}\n`;
+}
+function loadExcludedPatterns() {
+    return [`.test.`, `__snapshots__`];
+}
+function loadPrettierrc() {
+    var _a;
+    let config = {
+        singleQuote: true,
+        semi: true,
+    };
+    try {
+        (_a = vscode.workspace.workspaceFolders) === null || _a === void 0 ? void 0 : _a.map((folder) => {
+            config = JSON.parse(fs.readFileSync(folder.uri.path + `/.prettierrc`, `utf8`));
+        });
+    }
+    catch (_b) {
+        return config;
+    }
+    return config;
+}
 function getDirectories(folder) {
     return fs.readdirSync(folder).filter(function (file) {
-        return fs.statSync(folder + '/' + file).isDirectory();
+        return fs.statSync(folder + `/` + file).isDirectory();
     });
 }
-function getTypeScriptFiles(files, excludePatterns) {
-    excludePatterns = [];
+function getTypeScriptFiles(files) {
     return files.filter((file) => {
-        return (/\.tsx?$/.test(file) && file !== 'index.ts' && !excludePatterns.some((pattern) => file.includes(pattern)));
+        return (file.includes(`.ts`) && file !== `index.ts` && !loadExcludedPatterns().some((pattern) => file.includes(pattern)));
+    });
+}
+function getSCSSFiles(files) {
+    return files.filter((file) => {
+        return (file.includes(`.scss`) && file !== `index.scss` && !loadExcludedPatterns().some((pattern) => file.includes(pattern)));
+    });
+}
+function getCSSFiles(files) {
+    return files.filter((file) => {
+        return (file.includes(`.css`) && file !== `index.css` && !loadExcludedPatterns().some((pattern) => file.includes(pattern)));
     });
 }
 //# sourceMappingURL=generateIndexContent.js.map

@@ -2,7 +2,7 @@
 	"name": "index-generator",
 	"displayName": "index-generator",
 	"description": "The extension generates an index file with exports.",
-	"version": "0.0.5",
+	"version": "1.0.0",
 	"license": "MIT",
 	"repository": "https://github.com/BoomSoftware/index-generator.git",
 	"publisher": "przemo1115",
@@ -21,11 +21,11 @@
 		"commands": [
 			{
 				"command": "extension.generateIndex",
-				"title": "Generate/Update index with typescript files"
+				"title": "Generate/Update index with files"
 			},
 			{
 				"command": "extension.generateIndexWithFolders",
-				"title": "Generate/Update index with folders and typescript files"
+				"title": "Generate/Update index with folders and files"
 			}
 		],
 		"keybindings": [

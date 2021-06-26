@@ -10,8 +10,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.activate = void 0;
-const path_1 = require("path");
 const vscode = require("vscode");
+const interfaces_1 = require("./interfaces.");
+const path_1 = require("path");
 const writeIndexFile_1 = require("./writeIndexFile");
 function generateIndexCommand() {
     return __awaiter(this, void 0, void 0, function* () {
@@ -27,16 +28,27 @@ function generate(withFolders) {
     return __awaiter(this, void 0, void 0, function* () {
         const { activeTextEditor } = vscode.window;
         if (!activeTextEditor) {
-            vscode.window.showErrorMessage("Please open a file before activating this command.");
+            vscode.window.showErrorMessage(`This command is availiable only inside a file!`);
             return;
         }
         const { fileName } = activeTextEditor.document;
-        if (!/\.tsx?$/.test(fileName)) {
-            vscode.window.showErrorMessage("Only TypeScript files are supported at the moment, sorry!");
+        const tsFile = fileName.includes(`.ts`);
+        const cssFile = fileName.includes(`.css`);
+        const scssFile = fileName.includes(`.scss`);
+        if (!tsFile && !cssFile && !scssFile) {
+            vscode.window.showErrorMessage(`Selected file format is not available!`);
             return;
         }
         try {
-            yield writeIndexFile_1.writeIndexFile(path_1.dirname(fileName), withFolders);
+            if (tsFile) {
+                yield writeIndexFile_1.writeIndexFile(path_1.dirname(fileName), withFolders, interfaces_1.FileTypes.TYPESCRIPT);
+            }
+            if (cssFile) {
+                yield writeIndexFile_1.writeIndexFile(path_1.dirname(fileName), withFolders, interfaces_1.FileTypes.CSS);
+            }
+            if (scssFile) {
+                yield writeIndexFile_1.writeIndexFile(path_1.dirname(fileName), withFolders, interfaces_1.FileTypes.SCSS);
+            }
         }
         catch (error) {
             const errorMessage = `[Generate TS File] Something went wrong: ${error}`;
@@ -45,8 +57,8 @@ function generate(withFolders) {
     });
 }
 function activate(context) {
-    let onlyTs = vscode.commands.registerCommand("extension.generateIndex", generateIndexCommand);
-    let tsAndFolders = vscode.commands.registerCommand("extension.generateIndexWithFolders", generateIndexWithFoldersCommand);
+    let onlyTs = vscode.commands.registerCommand(`extension.generateIndex`, generateIndexCommand);
+    let tsAndFolders = vscode.commands.registerCommand(`extension.generateIndexWithFolders`, generateIndexWithFoldersCommand);
     context.subscriptions.push(onlyTs, tsAndFolders);
 }
 exports.activate = activate;

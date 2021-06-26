@@ -1,6 +1,8 @@
-import { dirname } from "path";
-import * as vscode from "vscode";
-import { writeIndexFile } from "./writeIndexFile";
+import * as vscode from 'vscode';
+
+import { FileTypes } from './interfaces.';
+import { dirname } from 'path';
+import { writeIndexFile } from './writeIndexFile';
 
 async function generateIndexCommand() {
   generate(false);
@@ -10,25 +12,39 @@ async function generateIndexWithFoldersCommand() {
   generate(true);
 }
 
-async function generate(withFolders: boolean) {
+async function generate(withFolders: boolean): Promise<void> {
   const { activeTextEditor } = vscode.window;
   if (!activeTextEditor) {
     vscode.window.showErrorMessage(
-      "Please open a file before activating this command.",
+      `This command is availiable only inside a file!`,
     );
     return;
   }
 
   const { fileName } = activeTextEditor.document;
-  if (!/\.tsx?$/.test(fileName)) {
+  const tsFile = fileName.includes(`.ts`);
+  const cssFile = fileName.includes(`.css`); 
+  const scssFile = fileName.includes(`.scss`); 
+
+  if (!tsFile && !cssFile && !scssFile) {
     vscode.window.showErrorMessage(
-      "Only TypeScript files are supported at the moment, sorry!",
+      `Selected file format is not available!`,
     );
     return;
   }
 
   try {
-    await writeIndexFile(dirname(fileName), withFolders);
+    if(tsFile){
+      await writeIndexFile(dirname(fileName), withFolders, FileTypes.TYPESCRIPT);
+    }
+
+    if(cssFile){
+      await writeIndexFile(dirname(fileName), withFolders, FileTypes.CSS);
+    }
+
+    if(scssFile){
+      await writeIndexFile(dirname(fileName), withFolders, FileTypes.SCSS);
+    }
 
   } catch (error) {
     const errorMessage = `[Generate TS File] Something went wrong: ${error}`;
@@ -38,12 +54,12 @@ async function generate(withFolders: boolean) {
 
 export function activate(context: vscode.ExtensionContext) {
   let onlyTs = vscode.commands.registerCommand(
-    "extension.generateIndex",
+    `extension.generateIndex`,
     generateIndexCommand,
   );
 
   let tsAndFolders = vscode.commands.registerCommand(
-    "extension.generateIndexWithFolders",
+    `extension.generateIndexWithFolders`,
     generateIndexWithFoldersCommand
   );
 
