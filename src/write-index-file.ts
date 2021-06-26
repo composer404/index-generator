@@ -1,7 +1,7 @@
 import * as fsExtra from 'fs-extra';
 
 import { FileTypes } from './interfaces.';
-import { generateIndexContent } from './generateIndexContent';
+import { generateIndexContent } from './generate-index-content';
 import { resolve } from 'path';
 
 export async function writeIndexFile(targetFolder: string, withFolders: boolean, fileType: FileTypes) {

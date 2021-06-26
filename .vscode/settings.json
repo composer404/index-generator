@@ -1,11 +1,45 @@
-// Place your settings in this file to overwrite default and user settings.
 {
-    "files.exclude": {
-        "out": false // set this to true to hide the "out" folder with the compiled JS files
+    // Editor and explorer.
+    "editor.codeActionsOnSave": {
+        "source.fixAll": true
     },
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.detectIndentation": false,
+    "editor.fontLigatures": true,
+    "editor.formatOnSave": true,
+    "editor.insertSpaces": true,
+    "editor.rulers": [150],
+    "editor.wordWrap": "bounded",
+    "editor.wordWrapColumn": 150,
     "search.exclude": {
-        "out": true // set this to false to include "out" folder in search results
+        "**/dist": true,
+        "**/package-lock.json": true,
+        "**/www": true
     },
-    // Turn off tsc task auto detection since we have the necessary tasks as npm scripts
-    "typescript.tsc.autoDetect": "off"
+    "window.title": "${folderName}",
+
+    // Consistency.
+    "files.eol": "\n",
+    "files.trimTrailingWhitespace": true,
+
+    // Git.
+    "git.autofetch": true,
+    "git.inputValidationSubjectLength": 128,
+
+    // JavaScript.
+    "javascript.suggestionActions.enabled": false,
+    "[javascript]": {
+        "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+    },
+
+    // TypeScript.
+    "typescript.preferences.importModuleSpecifier": "relative",
+    "typescript.preferences.quoteStyle": "single",
+    "typescript.tsdk": "node_modules/typescript/lib",
+    "[typescript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "workbench.tree.indent": 15,
+    "workbench.editor.tabSizing": "shrink",
+    "editor.fontSize": 15
 }

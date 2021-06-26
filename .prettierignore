@@ -1,0 +1,6 @@
+# Add files here to ignore them from prettier formatting
+out
+/coverage
+
+# Prettier isn't too good with .ejs templates.
+*.ejs
