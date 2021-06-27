@@ -5,7 +5,7 @@ export interface Config {
 }
 
 export enum FileTypes {
-    CSS,
-    TYPESCRIPT,
-    SCSS,
+    CSS = `CSS`,
+    TYPESCRIPT = `TYPESCRIPT`,
+    SCSS = `SCSS`,
 }

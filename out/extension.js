@@ -13,7 +13,7 @@ exports.activate = void 0;
 const vscode = require("vscode");
 const interfaces_1 = require("./interfaces.");
 const path_1 = require("path");
-const writeIndexFile_1 = require("./writeIndexFile");
+const write_index_file_1 = require("./write-index-file");
 function generateIndexCommand() {
     return __awaiter(this, void 0, void 0, function* () {
         generate(false);
@@ -41,13 +41,13 @@ function generate(withFolders) {
         }
         try {
             if (tsFile) {
-                yield writeIndexFile_1.writeIndexFile(path_1.dirname(fileName), withFolders, interfaces_1.FileTypes.TYPESCRIPT);
+                yield write_index_file_1.writeIndexFile(path_1.dirname(fileName), withFolders, interfaces_1.FileTypes.TYPESCRIPT);
             }
             if (cssFile) {
-                yield writeIndexFile_1.writeIndexFile(path_1.dirname(fileName), withFolders, interfaces_1.FileTypes.CSS);
+                yield write_index_file_1.writeIndexFile(path_1.dirname(fileName), withFolders, interfaces_1.FileTypes.CSS);
             }
             if (scssFile) {
-                yield writeIndexFile_1.writeIndexFile(path_1.dirname(fileName), withFolders, interfaces_1.FileTypes.SCSS);
+                yield write_index_file_1.writeIndexFile(path_1.dirname(fileName), withFolders, interfaces_1.FileTypes.SCSS);
             }
         }
         catch (error) {
