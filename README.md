@@ -2,7 +2,7 @@
 
 The extension generates an index file with exports and imports in case of stylesheet files. The elements and text format that will appear in the index depend on the selected command and selected configuration in <strong>.prettierrc</strong> file.
 
-![animation](https://github.com/BoomSoftware/index-generator/blob/master/img/index-generator.gif?raw=true)
+![animation](https://github.com/composer404/index-generator/blob/master/img/index-generator.gif?raw=true)
 
 ## Usage
 
